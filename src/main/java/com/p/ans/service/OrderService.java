@@ -1,18 +1,20 @@
 package com.p.ans.service;
 
-import com.p.ans.domain.Goods;
-import com.p.ans.domain.Order;
-import com.p.ans.domain.User;
+import com.p.ans.domain.*;
+import com.p.ans.exception.GoodsNotFoundException;
+import com.p.ans.exception.InsufficientBalanceException;
+import com.p.ans.exception.UserNotFoundException;
 import com.p.ans.repository.GoodsRepository;
 import com.p.ans.repository.OrderRepository;
 import com.p.ans.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import javax.transaction.Transactional;
 
 /**
  * Created by Xunxiao Ren on 2017/10/19.
+ *
  */
-
 @Service
 public class OrderService {
 
@@ -26,8 +28,37 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    Order order(User user, Goods goods) {
-        // TODO
-        throw new NotImplementedException();
+    @Transactional
+    public OrderResult makeOrder(OrderRequest orderRequest) {
+
+        User user = userRepository.findOne(orderRequest.getUid());
+        if (user == null) {
+            throw new UserNotFoundException("用户不存在");
+        }
+
+        Goods goods = goodsRepository.findOne(orderRequest.getItemid());
+        if (goods == null) {
+            throw new GoodsNotFoundException("商品不存在");
+        }
+
+        int totalPrice = orderRequest.getNum() * goods.getPrice();
+
+        if (totalPrice > user.getMoney()) {
+            throw new InsufficientBalanceException("用户余额不足");
+        } else {
+            user.setMoney(user.getMoney() - totalPrice);
+            goods.setQuantity(goods.getQuantity() - orderRequest.getNum());
+            Order order = new Order(user, goods, orderRequest.getNum());
+            order = orderRepository.save(order);
+
+            return new OrderResult(true, "成功");
+        }
+    }
+
+    /**
+     * @return 包含所有Order的Iterable对象
+     */
+    public Iterable<Order> findAll() {
+        return orderRepository.findAll();
     }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单</title>
+    <style>
+        .row label {
+            display: inline-block;
+            text-align: left;
+            width: 4rem;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+</head>
+<body>
+
+<div>
+    <table>
+        <tr>
+            <th>url</th>
+            <th>功能</th>
+        </tr>
+        <tr>
+            <td rowspan="2"><a href="/order">/order</a></td><td>POST: 创建订单请求</td>
+        </tr>
+        <tr>
+            <td>GET: 获取所有订单</td>
+        </tr>
+        <tr>
+            <td><a href="/user">/user</a></td>
+            <td>GET: 获取所有用户</td>
+        </tr>
+        <tr>
+            <td><a href="/goods">/goods</a></td>
+            <td>GET: 获取所有商品</td>
+        </tr>
+    </table>
+</div>
+
+<form action="/order" method="post" id="order-form">
+    <div class="row"><label for="uid">uid:</label><input type="number" id="uid" value="0"></div>
+    <div class="row"><label for="itemid">itemid:</label><input type="number" id="itemid" value="0"></div>
+    <div class="row"><label for="num">num:</label><input type="text" id="num" name="num" value="0"></div>
+    <input id="submit" type="button" value="submit">
+</form>
+
+<div id="result">
+
+</div>
+
+
+<script>
+    $('#submit').click(function () {
+        $.ajax("/order", {
+            headers: {
+                'Accept': 'application/json'
+            },
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            data: {
+                uid: parseInt($("#uid")[0].value),
+                itemid: parseInt($("#itemid")[0].value),
+                num: parseInt($("#num")[0].value)
+            },
+            dataType: "json"
+        }).then(function (data) {
+            $("#result")[0].innerHTML = data;
+        }).catch(function (xhr) {
+            $("#result")[0].innerHTML = xhr.responseText;
+        })
+    })
+</script>
+
+</body>
+</html>

@@ -1,12 +1,10 @@
-package com.p.ans.controller;
+package com.p.ans.rest;
 
 import com.p.ans.domain.User;
 import com.p.ans.repository.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collection;
 
 /**
  * Created by Xunxiao Ren on 2017/10/19.

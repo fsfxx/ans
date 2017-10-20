@@ -46,5 +46,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", money=" + money +
                 '}';
+
     }
 }

@@ -17,7 +17,6 @@ public class Order {
     @OneToOne(targetEntity = Goods.class)
     @JoinColumn(name = "goods_id")
     private Goods goods;
-
     private Integer quantity;
 
     public Order() {
@@ -28,6 +27,10 @@ public class Order {
         this.user = user;
         this.goods = goods;
         this.quantity = quantity;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public User getUser() {

@@ -1,4 +1,4 @@
-package com.p.ans.controller;
+package com.p.ans.rest;
 
 import com.p.ans.domain.Goods;
 import com.p.ans.repository.GoodsRepository;
