@@ -27,13 +27,11 @@ public class OrderService {
     private UserRepository userRepository;
     private GoodsRepository goodsRepository;
     private OrderRepository orderRepository;
-    private EntityManager entityManager;
 
-    public OrderService(UserRepository userRepository, GoodsRepository goodsRepository, OrderRepository orderRepository, EntityManager entityManager) {
+    public OrderService(UserRepository userRepository, GoodsRepository goodsRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.goodsRepository = goodsRepository;
         this.orderRepository = orderRepository;
-        this.entityManager = entityManager;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
