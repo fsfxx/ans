@@ -5,6 +5,7 @@ import com.p.ans.domain.OrderRequest;
 import com.p.ans.domain.OrderResult;
 import com.p.ans.exception.GoodsNotFoundException;
 import com.p.ans.exception.InsufficientBalanceException;
+import com.p.ans.exception.InsufficientStockException;
 import com.p.ans.exception.UserNotFoundException;
 import com.p.ans.service.OrderService;
 import org.springframework.http.HttpStatus;
@@ -74,6 +75,12 @@ public class OrderController {
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public OrderResult insufficientBalance(InsufficientBalanceException e) {
+        return new OrderResult(false, e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public OrderResult insufficientStock(InsufficientStockException e) {
         return new OrderResult(false, e.getMessage());
     }
 
