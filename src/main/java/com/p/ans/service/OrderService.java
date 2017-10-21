@@ -38,11 +38,6 @@ public class OrderService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public OrderResult makeOrder(OrderRequest orderRequest) {
-        boolean transactionBegin = TransactionSynchronizationManager.isActualTransactionActive();
-
-
-        System.out.printf("Is transaction begin? %b", transactionBegin);
-
         User user = userRepository.findOne(orderRequest.getUid());
         if (user == null) {
             throw new UserNotFoundException("用户不存在");
