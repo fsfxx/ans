@@ -1,9 +1,10 @@
-#url
+# url
 
-[123.207.240.94](123.207.240.94)
+[123.207.240.94](http://123.207.240.94)
 
 
-#API
+# API
+
 | url    | method | description | request type                 |
 | ------ | ------ | ----------- | ---------------------------- |
 | /order | POST   | 创建订单请求      | x-www-form-urlencoded & json |
