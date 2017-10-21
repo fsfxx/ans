@@ -6,7 +6,7 @@
     <groupId>com.p</groupId>
     <artifactId>ans</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>ans</name>
     <description></description>
