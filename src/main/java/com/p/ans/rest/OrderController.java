@@ -6,9 +6,6 @@ import com.p.ans.domain.OrderResult;
 import com.p.ans.exception.GoodsNotFoundException;
 import com.p.ans.exception.InsufficientBalanceException;
 import com.p.ans.exception.UserNotFoundException;
-import com.p.ans.repository.GoodsRepository;
-import com.p.ans.repository.OrderRepository;
-import com.p.ans.repository.UserRepository;
 import com.p.ans.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -58,7 +55,7 @@ public class OrderController {
 
     @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class})
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public OrderResult methodArgumentNotValid() {
+    public OrderResult noValid() {
         return new OrderResult(false, "参数错误");
     }
 

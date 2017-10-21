@@ -64,9 +64,9 @@
             },
             dataType: "json"
         }).then(function (data) {
-            $("#result")[0].innerHTML = data;
+            $("#result")[0].innerHTML = JSON.stringify(data);
         }).catch(function (xhr) {
-            $("#result")[0].innerHTML = xhr.responseText;
+            $("#result")[0].innerHTML = JSON.stringify(xhr.responseJSON);
         })
     })
 </script>
