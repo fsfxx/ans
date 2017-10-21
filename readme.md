@@ -5,7 +5,7 @@
 
 # API
 
-| url    | method | description | request type                 |
+| url    | method | description | request content type |
 | ------ | ------ | ----------- | ---------------------------- |
 | /order | POST   | 创建订单请求      | x-www-form-urlencoded & json |
 | /order | GET    | 返回所有订单      |                              |
