@@ -8,12 +8,9 @@ import com.p.ans.exception.UserNotFoundException;
 import com.p.ans.repository.GoodsRepository;
 import com.p.ans.repository.OrderRepository;
 import com.p.ans.repository.UserRepository;
-import org.springframework.data.jpa.repository.Lock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
@@ -27,21 +24,30 @@ public class OrderService {
     private UserRepository userRepository;
     private GoodsRepository goodsRepository;
     private OrderRepository orderRepository;
+    private EntityManager entityManager;
 
-    public OrderService(UserRepository userRepository, GoodsRepository goodsRepository, OrderRepository orderRepository) {
+
+    @Autowired
+    public OrderService(UserRepository userRepository, GoodsRepository goodsRepository, OrderRepository orderRepository, EntityManager entityManager) {
         this.userRepository = userRepository;
         this.goodsRepository = goodsRepository;
         this.orderRepository = orderRepository;
+        this.entityManager = entityManager;
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public OrderResult makeOrder(OrderRequest orderRequest) {
+
         User user = userRepository.findOne(orderRequest.getUid());
+        entityManager.lock(user, LockModeType.PESSIMISTIC_WRITE);
+
         if (user == null) {
             throw new UserNotFoundException("用户不存在");
         }
 
         Goods goods = goodsRepository.findOne(orderRequest.getItemid());
+        entityManager.lock(goods, LockModeType.PESSIMISTIC_WRITE);
+
         if (goods == null) {
             throw new GoodsNotFoundException("商品不存在");
         }
