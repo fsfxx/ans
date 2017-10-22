@@ -12,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-
 /**
  * Created by Xunxiao Ren on 2017/10/19.
  */
@@ -24,33 +21,21 @@ public class OrderService {
     private UserRepository userRepository;
     private GoodsRepository goodsRepository;
     private OrderRepository orderRepository;
-    private EntityManager entityManager;
-
 
     @Autowired
-    public OrderService(UserRepository userRepository, GoodsRepository goodsRepository, OrderRepository orderRepository, EntityManager entityManager) {
+    public OrderService(UserRepository userRepository, GoodsRepository goodsRepository, OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.goodsRepository = goodsRepository;
         this.orderRepository = orderRepository;
-        this.entityManager = entityManager;
     }
 
     @Transactional
     public OrderResult makeOrder(OrderRequest orderRequest) {
+        User user = userRepository.findById(orderRequest.getUid())
+                .orElseThrow(() -> new UserNotFoundException("用户不存在"));
 
-        User user = userRepository.findOne(orderRequest.getUid());
-        entityManager.lock(user, LockModeType.PESSIMISTIC_WRITE);
-
-        if (user == null) {
-            throw new UserNotFoundException("用户不存在");
-        }
-
-        Goods goods = goodsRepository.findOne(orderRequest.getItemid());
-        entityManager.lock(goods, LockModeType.PESSIMISTIC_WRITE);
-
-        if (goods == null) {
-            throw new GoodsNotFoundException("商品不存在");
-        }
+        Goods goods = goodsRepository.findById(orderRequest.getItemid())
+                .orElseThrow(() -> new GoodsNotFoundException("商品不存在"));
 
         if (orderRequest.getNum() > goods.getQuantity()) {
             throw new InsufficientStockException("库存不足");
@@ -68,7 +53,6 @@ public class OrderService {
         order = orderRepository.save(order);
 
         return new OrderResult(true, "成功");
-
     }
 
     /**
